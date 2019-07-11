@@ -92,12 +92,12 @@ def load():
 	return (X_train,y_train) , (X_test,y_test)
 
 (x_train, y_train), (x_test, y_test) = load()
-y_train = keras.utils.to_categorical(y_train, num_classes)
-y_test = keras.utils.to_categorical(y_test, num_classes)
 print(x_train.shape)
 print(y_train.shape)
 print(x_test.shape)
 print(y_test.shape)
+y_train = keras.utils.to_categorical(y_train, num_classes)
+y_test = keras.utils.to_categorical(y_test, num_classes)
 x_train /= 255
 x_test /= 255
 img_input = keras.layers.Input(shape=(384, 512, 3))
