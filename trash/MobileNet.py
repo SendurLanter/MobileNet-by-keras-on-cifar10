@@ -10,9 +10,9 @@ import keras
 import numpy as np
 import cv2
 X_train = np.empty((2054,384,512,3),dtype="float32")
-y_train=list()
-X_test = np.empty((527,3,384,512,3),dtype="float32")
-y_test=list()
+y_train=np.empty((2054,1),dtype="float32")
+X_test = np.empty((473,384,512,3),dtype="float32")
+y_test=np.empty((473,1),dtype="float32")
 def load():
 	tra_i=0
 	tes_i=0
@@ -24,10 +24,10 @@ def load():
 		#print(img.shape)
 		if i <= 322:
 			X_train[i] = img
-			y_train.append([1])
+			y_train[i] = [1]
 		else:
 			X_test[tes_i] = img
-			y_test.append([1])
+			y_test[tes_i] = [1]
 			tes_i+=1
 
 	datas = os.listdir("./glass")
@@ -36,10 +36,10 @@ def load():
 		img = cv2.imread(datas[i])
 		if i <= 401:
 			X_train[i+322] = img
-			y_train.append([2])			
+			y_train[i+322] = [2]			
 		else:
 			X_test[tes_i] = img
-			y_test.append([2])
+			y_test[tes_i] = [2]
 			tes_i+=1			
 
 	datas = os.listdir("./metal")
@@ -48,10 +48,10 @@ def load():
 		img = cv2.imread(datas[i])
 		if i <= 328:
 			X_train[i+322+401] = img
-			y_train.append([3])			
+			y_train[i+322+401] = [3]		
 		else:
 			X_test[tes_i] = img
-			y_test.append([3])
+			y_test[tes_i] = [3]
 			tes_i+=1			
 
 	datas = os.listdir("./paper")
@@ -60,10 +60,10 @@ def load():
 		img = cv2.imread(datas[i])
 		if i <= 475:
 			X_train[i+322+328+401] = img
-			y_train.append([4])			
+			y_train[i+322+328+401] = [4]			
 		else:
 			X_test[tes_i] = img
-			y_test.append([4])
+			y_test[tes_i] = [4]
 			tes_i+=1			
 
 	datas = os.listdir("./plastic")
@@ -72,10 +72,10 @@ def load():
 		img = cv2.imread(datas[i])
 		if i <= 386:
 			X_train[i+322+328+401+475] =img
-			y_train.append([5])			
+			y_train[i+322+328+401+475] = [5]			
 		else:
 			X_test[tes_i] = img
-			y_test.append([5])
+			y_test[tes_i] = [5]
 			tes_i+=1			
 
 	datas = os.listdir("./trash")
@@ -84,13 +84,13 @@ def load():
 		img = cv2.imread(datas[i])
 		if i <= 190:
 			X_train[i+322+328+401+475+386] =img
-			y_train.append([0])		
+			y_train[i+322+328+401+475+386] = [0]		
 		else:
 			X_test[tes_i] = img
-			y_test.append([0])
+			y_test[tes_i] = [0]
 			tes_i+=1
 	#print(X_train)
-	return (X_train,np.array(y_train)) , (X_test,np.array(y_test))
+	return (X_train,y_train) , (X_test,y_test)
 
 IMG_CHANNELS = 3
 IMG_ROWS = 384
@@ -101,7 +101,7 @@ NB_CLASSES = 6
 VALIDATION_SPLIT = 0.2
 OPTIM = RMSprop()
 (X_train, y_train), (X_test, y_test) = load()
-print(X_train.shape)
+print(y_train.shape)
 Y_train = np_utils.to_categorical(y_train, NB_CLASSES)
 Y_test = np_utils.to_categorical(y_test, NB_CLASSES) 
 #X_train = X_train.astype('float32')
