@@ -39,32 +39,31 @@ def MobileNet(input_tensor=None, input_shape=None, alpha=1, shallow=True, classe
     x = BatchNormalization()(x)
     x = Activation('relu')(x)
 
-    x = Convolution2D(int(128 * alpha), (1, 1), strides=(1, 1), padding='same', use_bias=False)(x)
+    '''x = Convolution2D(int(128 * alpha), (1, 1), strides=(1, 1), padding='same', use_bias=False)(x)
     x = BatchNormalization()(x)
     x = Activation('relu')(x)
     x = DepthwiseConvolution2D(int(128 * alpha), (3, 3), strides=(2, 2), padding='same', use_bias=False)(x)
     x = BatchNormalization()(x)
-    x = Activation('relu')(x)
-
-    x = Convolution2D(int(256 * alpha), (1, 1), strides=(1, 1), padding='same', use_bias=False)(x)
-    x = BatchNormalization()(x)
-    x = Activation('relu')(x)
-
-    '''x = DepthwiseConvolution2D(int(256 * alpha), (3, 3), strides=(1, 1), padding='same', use_bias=False)(x)
-    x = BatchNormalization()(x)
-    x = Activation('relu')(x)
-    x = Convolution2D(int(256 * alpha), (1, 1), strides=(1, 1), padding='same', use_bias=False)(x)
-    x = BatchNormalization()(x)
     x = Activation('relu')(x)'''
 
-    '''x = DepthwiseConvolution2D(int(256 * alpha), (3, 3), strides=(2, 2), padding='same', use_bias=False)(x)
+    x = Convolution2D(int(256 * alpha), (1, 1), strides=(1, 1), padding='same', use_bias=False)(x)
+    x = BatchNormalization()(x)
+    x = Activation('relu')(x)
+    x = DepthwiseConvolution2D(int(256 * alpha), (3, 3), strides=(1, 1), padding='same', use_bias=False)(x)
+    x = BatchNormalization()(x)
+    x = Activation('relu')(x)
+    
+    '''x = Convolution2D(int(256 * alpha), (1, 1), strides=(1, 1), padding='same', use_bias=False)(x)
+    x = BatchNormalization()(x)
+    x = Activation('relu')(x)
+    x = DepthwiseConvolution2D(int(256 * alpha), (3, 3), strides=(2, 2), padding='same', use_bias=False)(x)
     x = BatchNormalization()(x)
     x = Activation('relu')(x)
     x = Convolution2D(int(512 * alpha), (1, 1), strides=(1, 1), padding='same', use_bias=False)(x)
     x = BatchNormalization()(x)
     x = Activation('relu')(x)'''
 
-    if not shallow:
+    '''if not shallow:
         for _ in range(5):
             x = DepthwiseConvolution2D(int(512 * alpha), (3, 3), strides=(1, 1), padding='same', use_bias=False)(x)
             x = BatchNormalization()(x)
@@ -85,7 +84,7 @@ def MobileNet(input_tensor=None, input_shape=None, alpha=1, shallow=True, classe
     x = Activation('relu')(x)
     x = Convolution2D(int(1024 * alpha), (1, 1), strides=(1, 1), padding='same', use_bias=False)(x)
     x = BatchNormalization()(x)
-    x = Activation('relu')(x)
+    x = Activation('relu')(x)'''
 
     x = GlobalAveragePooling2D()(x)
     out = Dense(classes, activation='softmax')(x)
