@@ -9,7 +9,45 @@ import keras.backend as K
 from keras.datasets import cifar10
 from utils import block
 import keras
-num_classes=10
+num_classes=6
+
+x_train = np.empty((2527,384,512,3),dtype="float32")
+x_test = np.empty((473,384,512,3),dtype="float32")
+y_train=list()
+y_test=list()
+def load():
+  tra_i=0
+  tes_i=0
+  datas = os.listdir('./')
+  total = len(datas)
+  print(total)
+  for e in datas:
+    img = cv2.imread(e)
+    if e[:5] == 'cardb':
+      x_train[tra_i] = img
+      y_train.append([1])
+      tra_i+=1
+    if e[:5] == 'glass':
+      x_train[tra_i] = img
+      y_train.append([2])
+      tra_i+=1
+    if e[:5] == 'metal':
+      x_train[tra_i] = img
+      y_train.append([3])
+      tra_i+=1
+    if e[:5] == 'paper':
+      x_train[tra_i] = img
+      y_train.append([4])
+      tra_i+=1
+    if e[:5] == 'plast':
+      x_train[tra_i] = img
+      y_train.append([5])
+      tra_i+=1
+    if e[:5] == 'trash':
+      x_train[tra_i] = img
+      y_train.append([0])
+      tra_i+=1
+  return (x_train,np.array(y_train)) , (x_test,np.array(y_test))
 
 
 def ShuffleNetV2(include_top=True,
@@ -90,14 +128,14 @@ def ShuffleNetV2(include_top=True,
 
 if __name__ == '__main__':
     import os
-    (x_train, y_train), (x_test, y_test) = cifar10.load_data()
+    (x_train, y_train), (x_test, y_test) = load()
     y_train = keras.utils.to_categorical(y_train, num_classes)
     y_test = keras.utils.to_categorical(y_test, num_classes)
     x_train = x_train.astype('float32')
     x_test = x_test.astype('float32')
     x_train /= 255
     x_test /= 255
-    model = ShuffleNetV2(include_top=True, input_shape=(32, 32, 3), bottleneck_ratio=1)
+    model = ShuffleNetV2(include_top=True, input_shape=(384, 512, 3), bottleneck_ratio=1)
     model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
     model.summary()
     model.fit(x_train, y_train,
@@ -106,7 +144,3 @@ if __name__ == '__main__':
               validation_data=(x_test, y_test),
               shuffle=True,
               verbose=1)
-
-    pass
-
-
