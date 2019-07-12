@@ -75,7 +75,6 @@ def load():
 	print(total)
 	for e in datas:
 		img = cv2.imread(e)
-		#print(tra_i)
 		if e[:5] == 'cardb':
 			x_train[tra_i] = img
 			y_train.append([1])
