@@ -98,7 +98,7 @@ def load():
 IMG_CHANNELS = 3
 IMG_ROWS = 384
 IMG_COLS = 512
-BATCH_SIZE = 32
+BATCH_SIZE = 4
 NB_EPOCH = 20
 NB_CLASSES = 6
 VALIDATION_SPLIT = 0.2
@@ -116,29 +116,20 @@ a=1
 print('sucs')
 model = Sequential()
 model.add(SeparableConv2D(np.int(32*a), (3, 3),init='glorot_normal' ,padding = 'same',input_shape = (IMG_ROWS, IMG_COLS, IMG_CHANNELS)))
-model.add(Activation('relu'))
 model.add(BatchNormalization())
+model.add(Activation('relu'))
 model.add(SeparableConv2D(np.int(64*a), (3, 3),init='glorot_normal' ,padding = 'same',input_shape = (IMG_ROWS, IMG_COLS, IMG_CHANNELS)))
-model.add(Activation('relu'))
 model.add(BatchNormalization())
+model.add(Activation('relu'))
 model.add(SeparableConv2D(np.int(128*a), (3, 3),init='glorot_normal' ,padding = 'same',input_shape = (IMG_ROWS, IMG_COLS, IMG_CHANNELS)))
-model.add(Activation('relu'))
 model.add(BatchNormalization())
-model.add(SeparableConv2D(np.int(128*a), (3, 3),init='glorot_normal' ,padding = 'same',input_shape = (IMG_ROWS, IMG_COLS, IMG_CHANNELS)))
 model.add(Activation('relu'))
-model.add(BatchNormalization())
+
 model.add(SeparableConv2D(np.int(256*a), (3, 3),init='glorot_normal' ,padding = 'same',input_shape = (IMG_ROWS, IMG_COLS, IMG_CHANNELS)))
-model.add(Activation('relu'))
 model.add(BatchNormalization())
-model.add(SeparableConv2D(np.int(256*a), (3, 3),init='glorot_normal' ,padding = 'same',input_shape = (IMG_ROWS, IMG_COLS, IMG_CHANNELS)))
 model.add(Activation('relu'))
-model.add(BatchNormalization())
 
 model.add(SeparableConv2D(np.int(512*a), (3, 3),init='glorot_normal' ,padding = 'same',input_shape = (IMG_ROWS, IMG_COLS, IMG_CHANNELS)))
-model.add(Activation('relu'))
-model.add(BatchNormalization())
-
-model.add(SeparableConv2D(np.int(1024*a), (3, 3),init='glorot_normal' ,padding = 'same',input_shape = (IMG_ROWS, IMG_COLS, IMG_CHANNELS)))
 model.add(Activation('relu'))
 model.add(BatchNormalization())
 
