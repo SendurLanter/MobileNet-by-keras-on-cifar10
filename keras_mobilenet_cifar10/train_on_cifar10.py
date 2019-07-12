@@ -7,61 +7,6 @@ from keras.preprocessing import image
 batch_size = 64
 num_classes = 6
 epochs = 20
-'''
-def load():
-	PATH = os.getcwd()
-	x_train = []
-	y_train = []
-	train_path = PATH+'/cardboard/'
-	train_data = os.listdir(train_path)
-	for sample in train_data:
-		img_path = train_path+sample
-		x = image.load_img(img_path)
-		x_train.append(x)
-		y_train.append([1])
-
-	train_path = PATH+'/glass/'
-	train_data = os.listdir(train_path)
-	for sample in train_data:
-		img_path = train_path+sample
-		x = image.load_img(img_path)
-		x_train.append(x)
-		y_train.append([2])
-
-	train_path = PATH+'/metal/'
-	train_data = os.listdir(train_path)
-	for sample in train_data:
-		img_path = train_path+sample
-		x = image.load_img(img_path)
-		x_train.append(x)
-		y_train.append([3])
-
-	train_path = PATH+'/paper/'
-	train_data = os.listdir(train_path)
-	for sample in train_data:
-		img_path = train_path+sample
-		x = image.load_img(img_path)
-		x_train.append(x)
-		y_train.append([4])
-
-	train_path = PATH+'/plastic/'
-	train_data = os.listdir(train_path)
-	for sample in train_data:
-		img_path = train_path+sample
-		x = image.load_img(img_path)
-		x_train.append(x)
-		y_train.append([5])
-
-	train_path = PATH+'/trash/'
-	train_data = os.listdir(train_path)
-	for sample in train_data:
-		img_path = train_path+sample
-		x = image.load_img(img_path)
-		x_train.append(x)
-		y_train.append([0])
-	print(x_train)
-	x_train = np.array(x_train)
-	y_train = np.array(y_train)'''
 
 x_train = np.empty((2527,384,512,3),dtype="float32")
 x_test = np.empty((473,384,512,3),dtype="float32")
