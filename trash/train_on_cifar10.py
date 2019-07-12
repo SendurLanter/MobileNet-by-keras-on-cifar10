@@ -3,7 +3,7 @@ from keras.callbacks import TensorBoard
 import keras
 import numpy as np
 from model import MobileNet
-batch_size = 128
+batch_size = 32
 num_classes = 6
 epochs = 20
 
@@ -25,6 +25,7 @@ def load():
 		else:
 			X_test[tes_i] = img
 			y_test.append([1])
+			tes_i+=1
 
 	datas = os.listdir("./glass")
 	total = len(datas)
