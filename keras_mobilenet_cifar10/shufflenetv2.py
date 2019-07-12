@@ -11,7 +11,7 @@ from utils import block
 import keras
 num_classes=6
 
-x_train = np.empty((2527,384,512,3),dtype="float32")
+x_train = np.empty((2523,384,512,3),dtype="float32")
 x_test = np.empty((473,384,512,3),dtype="float32")
 y_train=list()
 y_test=list()
@@ -58,7 +58,7 @@ def ShuffleNetV2(include_top=True,
                  load_model=None,
                  num_shuffle_units=[3,7,3],
                  bottleneck_ratio=1,
-                 classes=10):
+                 classes=6):
     if K.backend() != 'tensorflow':
         raise RuntimeError('Only tensorflow supported for now')
     name = 'ShuffleNetV2_{}_{}_{}'.format(scale_factor, bottleneck_ratio, "".join([str(x) for x in num_shuffle_units]))

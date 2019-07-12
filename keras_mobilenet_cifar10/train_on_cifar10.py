@@ -20,6 +20,7 @@ def load():
 	print(total)
 	for e in datas:
 		img = cv2.imread(e)
+		img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 		if e[:5] == 'cardb':
 			x_train[tra_i] = img
 			y_train.append([1])
