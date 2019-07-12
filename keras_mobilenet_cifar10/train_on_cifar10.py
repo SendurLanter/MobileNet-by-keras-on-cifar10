@@ -76,25 +76,30 @@ def load():
 	for e in datas:
 		img = cv2.imread(e)
 		#print(tra_i)
-		x_train[tra_i] = img
 		if e[:5] == 'cardb':
+			x_train[tra_i] = img
 			y_train.append([1])
 			tra_i+=1
 		if e[:5] == 'glass':
+			x_train[tra_i] = img
 			y_train.append([2])
 			tra_i+=1
 		if e[:5] == 'metal':
+			x_train[tra_i] = img
 			y_train.append([3])
 			tra_i+=1
 		if e[:5] == 'paper':
+			x_train[tra_i] = img
 			y_train.append([4])
 			tra_i+=1
 		if e[:5] == 'plast':
+			x_train[tra_i] = img
 			y_train.append([5])
 			tra_i+=1
 		if e[:5] == 'trash':
+			x_train[tra_i] = img
 			y_train.append([0])
-                        tra_i+=1
+			tra_i+=1
 	return (x_train,np.array(y_train)) , (x_test,np.array(y_test))
 
 	'''
