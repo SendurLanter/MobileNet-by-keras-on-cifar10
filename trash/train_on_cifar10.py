@@ -7,7 +7,7 @@ batch_size = 32
 num_classes = 6
 epochs = 20
 
-X_train = np.empty((2054,384,512,3),dtype="float32")
+X_train = np.empty((2527,384,512,3),dtype="float32")
 X_test = np.empty((473,384,512,3),dtype="float32")
 y_train=list()
 y_test=list()
@@ -18,79 +18,79 @@ def load():
 	total = len(datas)
 	for i in range(total):
 		img = cv2.imread(datas[i])
-		if i <= 322:
-			X_train[tra_i] = img
-			y_train.append([1])
-			tra_i+=1
-		else:
+		#if i <= 322:
+		X_train[tra_i] = img
+		y_train.append([1])
+		tra_i+=1
+		'''else:
 			X_test[tes_i] = img
 			y_test.append([1])
-			tes_i+=1
+			tes_i+=1'''
 
 	datas = os.listdir("./glass")
 	total = len(datas)
 	for i in range(total):
 		img = cv2.imread(datas[i])
-		if i <= 401:
-			X_train[tra_i] = img
-			y_train.append([2])	
-			tra_i+=1		
-		else:
+		#if i <= 401:
+		X_train[tra_i] = img
+		y_train.append([2])	
+		tra_i+=1		
+		'''else:
 			X_test[tes_i] = img
 			tes_i+=1	
-			y_test.append([2])		
+			y_test.append([2])'''
 
 	datas = os.listdir("./metal")
 	total = len(datas)
 	for i in range(total):
 		img = cv2.imread(datas[i])
-		if i <= 328:
-			X_train[tra_i] = img	
-			y_train.append([3])
-			tra_i+=1
-		else:
+		#if i <= 328:
+		X_train[tra_i] = img	
+		y_train.append([3])
+		tra_i+=1
+		'''else:
 			X_test[tes_i] = img
 			y_test.append([3])
-			tes_i+=1			
+			tes_i+=1'''			
 
 	datas = os.listdir("./paper")
 	total = len(datas)
 	for i in range(total):
 		img = cv2.imread(datas[i])
-		if i <= 475:
-			X_train[tra_i] = img	
-			y_train.append([4])		
-			tra_i+=1
-		else:
+		#if i <= 475:
+		X_train[tra_i] = img	
+		y_train.append([4])		
+		tra_i+=1
+		'''else:
 			X_test[tes_i] = img
 			y_test.append([4])
-			tes_i+=1			
+			tes_i+=1'''			
 
 	datas = os.listdir("./plastic")
 	total = len(datas)
 	for i in range(total):
 		img = cv2.imread(datas[i])
-		if i <= 386:
-			X_train[tra_i] =img	
-			y_train.append([5])
-			tra_i+=1		
-		else:
+		#if i <= 386:
+		X_train[tra_i] = img	
+		y_train.append([5])
+		tra_i+=1		
+		'''else:
 			X_test[tes_i] = img
 			y_test.append([5])
-			tes_i+=1			
+			tes_i+=1'''			
 
 	datas = os.listdir("./trash")
 	total = len(datas)
 	for i in range(total):
 		img = cv2.imread(datas[i])
-		if i <= 190:
-			X_train[tra_i] =img	
-			y_train.append([0])	
-			tra_i+=1
-		else:
+		#if i <= 190:
+		X_train[tra_i] =img	
+		y_train.append([0])	
+		tra_i+=1
+		'''else:
 			X_test[tes_i] = img
 			y_test.append([0])
-			tes_i+=1
+			tes_i+=1'''
 	return (X_train,np.array(y_train)) , (X_test,np.array(y_test))
 
 (x_train, y_train), (x_test, y_test) = load()
@@ -108,11 +108,6 @@ print(x_test.shape)
 print(y_test.shape)
 img_input = keras.layers.Input(shape=(384, 512, 3))
 model = MobileNet(input_tensor=img_input, classes=num_classes)
-model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
 model.summary()
-model.fit(x_train, y_train,
-          batch_size=batch_size,
-          epochs=epochs,
-          validation_data=(x_test, y_test),
-          shuffle=True,
-          verbose=1)
+model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
+model.fit(x_train, y_train, batch_size = batch_size, epochs = epochs, validation_split = 0.2, verbose = 1,shuffle=True)
