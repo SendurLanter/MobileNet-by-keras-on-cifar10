@@ -9,7 +9,8 @@ num_classes = 6
 epochs = 20
 
 x_train = np.empty((2527,384,512,3),dtype="float32")
-x_test = np.empty((473,384,512,3),dtype="float32")
+#x_test = np.empty((473,384,512,3),dtype="float32")
+x_test=list()
 y_train=list()
 y_test=list()
 def load():
@@ -17,31 +18,36 @@ def load():
 	tes_i=0
 	datas = os.listdir('./')
 	total = len(datas)
-	print(total)
+	#print(datas)
 	for e in datas:
 		img = cv2.imread(e)
-		img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 		if e[:5] == 'cardb':
+			img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 			x_train[tra_i] = img
 			y_train.append([1])
 			tra_i+=1
 		if e[:5] == 'glass':
+			img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 			x_train[tra_i] = img
 			y_train.append([2])
 			tra_i+=1
 		if e[:5] == 'metal':
+			img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 			x_train[tra_i] = img
 			y_train.append([3])
 			tra_i+=1
 		if e[:5] == 'paper':
+			img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 			x_train[tra_i] = img
 			y_train.append([4])
 			tra_i+=1
 		if e[:5] == 'plast':
+			img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 			x_train[tra_i] = img
 			y_train.append([5])
 			tra_i+=1
 		if e[:5] == 'trash':
+			img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 			x_train[tra_i] = img
 			y_train.append([0])
 			tra_i+=1
@@ -99,16 +105,12 @@ def load():
 (x_train, y_train), (x_test, y_test) = load()
 print(x_train.shape)
 print(y_train.shape)
-print(x_test.shape)
-print(y_test.shape)
 y_train = keras.utils.to_categorical(y_train, num_classes)
-y_test = keras.utils.to_categorical(y_test, num_classes)
+#y_test = keras.utils.to_categorical(y_test, num_classes)
 x_train /= 255
-x_test /= 255
+#x_test /= 255
 print(x_train.shape)
 print(y_train.shape)
-print(x_test.shape)
-print(y_test.shape)
 img_input = keras.layers.Input(shape=(384, 512, 3))
 model = MobileNet(input_tensor=img_input, classes=num_classes)
 model.summary()
