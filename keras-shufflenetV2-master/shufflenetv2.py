@@ -8,19 +8,67 @@ from keras.models import Model
 import keras.backend as K
 from keras.datasets import cifar10
 from utils import block
+import cv2
 import keras
-num_classes=10
+num_classes=6
+
+
+x_train = np.empty((2517,384,512,3),dtype="float32")
+#x_test = np.empty((473,384,512,3),dtype="float32")
+x_test=list()
+y_train=list()
+y_test=list()
+def load():
+  tra_i=0
+  tes_i=0
+  datas = os.listdir('./')
+  total = len(datas)
+  #print(datas)
+  for e in datas:
+    img = cv2.imread(e)
+    if e[:5] == 'cardb':
+      img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+      x_train[tra_i] = img
+      y_train.append([1])
+      tra_i+=1
+    if e[:5] == 'glass':
+      img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+      x_train[tra_i] = img
+      y_train.append([2])
+      tra_i+=1
+    if e[:5] == 'metal':
+      img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+      x_train[tra_i] = img
+      y_train.append([3])
+      tra_i+=1
+    if e[:5] == 'paper':
+      img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+      x_train[tra_i] = img
+      y_train.append([4])
+      tra_i+=1
+    if e[:5] == 'plast':
+      img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+      x_train[tra_i] = img
+      y_train.append([5])
+      tra_i+=1
+    if e[:5] == 'trash':
+      img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+      x_train[tra_i] = img
+      y_train.append([0])
+      tra_i+=1
+  return (x_train,np.array(y_train)) , (x_test,np.array(y_test))
+
 
 
 def ShuffleNetV2(include_top=True,
                  input_tensor=None,
                  scale_factor=1.0,
                  pooling='max',
-                 input_shape=(224,224,3),
+                 input_shape=(384,512,3),
                  load_model=None,
                  num_shuffle_units=[3,7,3],
                  bottleneck_ratio=1,
-                 classes=10):
+                 classes=6):
     if K.backend() != 'tensorflow':
         raise RuntimeError('Only tensorflow supported for now')
     name = 'ShuffleNetV2_{}_{}_{}'.format(scale_factor, bottleneck_ratio, "".join([str(x) for x in num_shuffle_units]))
@@ -90,23 +138,14 @@ def ShuffleNetV2(include_top=True,
 
 if __name__ == '__main__':
     import os
-    (x_train, y_train), (x_test, y_test) = cifar10.load_data()
+    (x_train, y_train), (x_test, y_test) = load()
     y_train = keras.utils.to_categorical(y_train, num_classes)
-    y_test = keras.utils.to_categorical(y_test, num_classes)
-    x_train = x_train.astype('float32')
-    x_test = x_test.astype('float32')
     x_train /= 255
-    x_test /= 255
-    model = ShuffleNetV2(include_top=True, input_shape=(32, 32, 3), bottleneck_ratio=1)
+    model = ShuffleNetV2(include_top=True, input_shape=(384, 512, 3), bottleneck_ratio=1)
     model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
     model.summary()
     model.fit(x_train, y_train,
               batch_size=32,
               epochs=15,
-              validation_data=(x_test, y_test),
               shuffle=True,
               verbose=1)
-
-    pass
-
-
