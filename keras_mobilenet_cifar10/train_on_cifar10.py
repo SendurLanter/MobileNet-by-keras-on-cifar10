@@ -8,7 +8,7 @@ batch_size = 64
 num_classes = 6
 epochs = 20
 
-x_train = np.empty((2527,384,512,3),dtype="float32")
+x_train = np.empty((2517,384,512,3),dtype="float32")
 #x_test = np.empty((473,384,512,3),dtype="float32")
 x_test=list()
 y_train=list()
@@ -115,4 +115,4 @@ img_input = keras.layers.Input(shape=(384, 512, 3))
 model = MobileNet(input_tensor=img_input, classes=num_classes)
 model.summary()
 model.compile(loss='categorical_crossentropy',optimizer = keras.optimizers.rmsprop(lr=0.0004, decay=5e-4),metrics=['accuracy'])
-model.fit(x_train, y_train, batch_size = batch_size, epochs = epochs, verbose = 1,shuffle=True)
+model.fit(x_train, y_train, validation_split =0.2,batch_size = batch_size, epochs = epochs, verbose = 1,shuffle=True)
