@@ -14,11 +14,53 @@ batch_size = 128
 num_classes = 10
 epochs = 20
 
-""" Define layers block functions """
+x_train = np.empty((2517,384,512,3),dtype="float32")
+x_test=list()
+y_train=list()
+y_test=list()
+def load():
+    tra_i=0
+    tes_i=0
+    datas = os.listdir('./')
+    total = len(datas)
+    #print(datas)
+    for e in datas:
+        img = cv2.imread(e)
+        if e[:5] == 'cardb':
+            img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+            x_train[tra_i] = img
+            y_train.append([1])
+            tra_i+=1
+        if e[:5] == 'glass':
+            img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+            x_train[tra_i] = img
+            y_train.append([2])
+            tra_i+=1
+        if e[:5] == 'metal':
+            img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+            x_train[tra_i] = img
+            y_train.append([3])
+            tra_i+=1
+        if e[:5] == 'paper':
+            img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+            x_train[tra_i] = img
+            y_train.append([4])
+            tra_i+=1
+        if e[:5] == 'plast':
+            img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+            x_train[tra_i] = img
+            y_train.append([5])
+            tra_i+=1
+        if e[:5] == 'trash':
+            img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+            x_train[tra_i] = img
+            y_train.append([0])
+            tra_i+=1
+    return (x_train,np.array(y_train)) , (x_test,np.array(y_test))
+
 def Hswish(x):
     return x * tf.nn.relu6(x + 3) / 6
 
-# ** update custom Activate functions
 get_custom_objects().update({'custom_activation': Activation(Hswish)})
 
 def __conv2d_block(_inputs, filters, kernel, strides, is_use_bias=False, padding='same', activation='RE'):
@@ -66,16 +108,13 @@ def __se_block(_inputs, ratio=4, pooling_type='avg'):
     return multiply([_inputs, se])
 
 def __bottleneck_block(_inputs, out_dim, kernel, strides, expansion_ratio, is_use_bais=False, shortcut=True, is_use_se=True, activation='RE', *args):
-    # ** to high dim 
+
     bottleneck_dim = K.int_shape(_inputs)[-1] * expansion_ratio
 
-    # ** pointwise conv 
     x = __conv2d_block(_inputs, bottleneck_dim, kernel=(1, 1), strides=(1, 1), is_use_bias=is_use_bais, activation=activation)
 
-    # ** depthwise conv
     x = __depthwise_block(_inputs, kernel=kernel, strides=strides, is_use_se=is_use_se, activation=activation)
 
-    # ** pointwise conv
     x = Conv2D(out_dim, (1, 1), strides=(1, 1), padding='same')(x)
     x = BatchNormalization()(x)
 
@@ -105,7 +144,6 @@ def build_mobilenet_v3(input_size=224, num_classes=1000, model_type='large', poo
     for config in config_list:
         net = __bottleneck_block(net, *config)
     
-    # ** final layers
     net = __conv2d_block(net, 960, kernel=(3, 3), strides=(1, 1), is_use_bias=True, padding='same', activation='HS')
 
     if pooling_type == 'avg':
@@ -115,7 +153,6 @@ def build_mobilenet_v3(input_size=224, num_classes=1000, model_type='large', poo
     else:
         raise NotImplementedError
 
-    # ** shape=(None, channel) --> shape(1, 1, channel) 
     pooled_shape = (1, 1, net._keras_shape[-1])
 
     net = Reshape(pooled_shape)(net)
@@ -130,9 +167,6 @@ def build_mobilenet_v3(input_size=224, num_classes=1000, model_type='large', poo
 
     return model
 
-""" define bottleneck structure """
-# ** 
-# **             
 global large_config_list    
 global small_config_list
 
@@ -164,21 +198,14 @@ small_config_list = [[16,  (3, 3), (2, 2), 16,  False, False, True,  'RE'],
                      [96,  (5, 5), (1, 1), 576, False, True,  True,  'HS'],
                      [96,  (5, 5), (1, 1), 576, False, True,  True,  'HS']]
 
-
-""" build MobileNet V3 model """
-(x_train, y_train), (x_test, y_test) = cifar10.load_data()
+(x_train, y_train), (x_test, y_test) = load()
+print(x_train.shape)
+print(y_train.shape)
 y_train = keras.utils.to_categorical(y_train, num_classes)
-y_test = keras.utils.to_categorical(y_test, num_classes)
-x_train = x_train.astype('float32')
-x_test = x_test.astype('float32')
 x_train /= 255
-x_test /= 255
+print(x_train.shape)
+print(y_train.shape)
 model = build_mobilenet_v3(input_size=32, num_classes=10, model_type='large', pooling_type='avg', include_top=True)
 model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
 model.summary()
-model.fit(x_train, y_train,
-          batch_size=batch_size,
-          epochs=epochs,
-          validation_data=(x_test, y_test),
-          shuffle=True,
-          verbose=1)
+model.fit(x_train, y_train,batch_size=batch_size,epochs=epochs,validation_split =0.2,shuffle=True,verbose=1)
